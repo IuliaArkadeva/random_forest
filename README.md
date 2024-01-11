@@ -8,9 +8,10 @@ wich shows the stages results*
 ********
 Stages:
 -----------------------------------
-1. Input & process input
+1. Input & processing of the input
 2. Creating a random samples of attributes
 3. Creating trees
 4. Collecting trees resuts
 5. Calculating a general desidion
-6* Evaluation ??
+6. Visualisation
+7* Evaluation ??
