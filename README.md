@@ -1,8 +1,9 @@
 Random forest
 =====================
 Goal: working algoithm of random forest
+---
 wich shows the stages results*
-***
+---
 *optional
 ********
 Stages:
