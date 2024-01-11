@@ -1,2 +1,2 @@
-h1 Random forest
-***
+Random forest
+=====================
