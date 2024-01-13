@@ -1,0 +1,46 @@
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import export_graphviz
+import pydot
+
+features = pd.read_csv('C:/Users/aliba/Desktop/cs/randforest_python_weather/HDbinary.csv')
+
+labels = np.array(features['HeartDisease'])
+features = features.drop('HeartDisease', axis = 1)
+feature_list = list(features.columns)
+features = np.array(features)
+train_features, test_features, train_labels, test_labels = train_test_split(features, labels, test_size = 0.25, random_state = 42)
+
+baseline_preds = test_features[:, feature_list.index('WeightLess100')]
+
+rf = RandomForestRegressor(n_estimators= 1000, random_state= 42)
+rf.fit(train_features, train_labels)
+
+predictions = rf.predict(test_features)
+
+predictions = predictions.reshape(-1, 1)
+
+model = LogisticRegression(solver='liblinear', random_state=0)
+model.fit(predictions, test_labels)
+model = LogisticRegression(solver='liblinear', random_state=0).fit(predictions, test_labels)
+predictions = model.predict(predictions)
+errors = abs(predictions - test_labels)
+print('Mean Absolute Error:', round(np.mean(errors), 2))
+
+features_long = sns.load_dataset("features")
+features = (
+    features_long
+    .pivot(index="WeightLess100", columns="HealthyLungs", values="HeartDisease")
+)
+f, ax = plt.subplots(figsize=(9, 6))
+sns.heatmap(features, annot=True, fmt="d", linewidths=.5, ax=ax)
+confusion_matrix(features, predictions)
+tree = rf.estimators_[5]
+#export_graphviz(tree, out_file='tree.dot', feature_names=feature_list, rounded=True, precision=1)
+#(graph,) = pydot.graph_from_dot_file('tree.dot')
